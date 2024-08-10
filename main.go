@@ -67,7 +67,7 @@ func info(c *gin.Context) {
 		return
 	}
 
-	c.HTML(http.StatusOK, "info.html", gin.H{
+	c.HTML(http.StatusOK, "info.tmpl", gin.H{
 		"entries": entries,
 	})
 }
