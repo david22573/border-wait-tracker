@@ -1,1 +1,1 @@
-nohup ./border-wait-tracker > /dev/null 2>&1
+nohup ./border-wait-tracker > /dev/null 2>&1 &
