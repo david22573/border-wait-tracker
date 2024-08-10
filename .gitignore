@@ -21,4 +21,4 @@
 go.work
 
 # Go build
-./border-wait-tracker
+border-wait-tracker
