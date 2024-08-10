@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mmcdole/gofeed"
@@ -21,8 +22,12 @@ func main() {
 		"https://bwt.cbp.gov/api/bwtRss/rssbyportnum/HTML/POV/250401",
 	}
 	go func() {
-		for _, url := range URLS {
-			feedWriter(url)
+		for {
+			for _, url := range URLS {
+				feedWriter(url)
+				time.Sleep(time.Minute * 2)
+			}
+			time.Sleep(time.Minute * 15)
 		}
 	}()
 	router := gin.Default()
