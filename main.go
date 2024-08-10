@@ -25,9 +25,9 @@ func main() {
 		for {
 			for _, url := range URLS {
 				feedWriter(url)
-				time.Sleep(time.Minute * 2)
+				time.Sleep(time.Minute * 1)
 			}
-			time.Sleep(time.Minute * 15)
+			time.Sleep(time.Minute * 5)
 		}
 	}()
 	router := gin.Default()
