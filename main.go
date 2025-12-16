@@ -5,31 +5,11 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/mmcdole/gofeed"
 )
 
-type Entry struct {
-	Name string
-	Body string
-}
-
 func main() {
-	URLS := []string{
-		"https://bwt.cbp.gov/api/bwtRss/rssbyportnum/HTML/POV/250601",
-		"https://bwt.cbp.gov/api/bwtRss/rssbyportnum/HTML/POV/250401",
-	}
-	go func() {
-		for {
-			for _, url := range URLS {
-				feedWriter(url)
-				time.Sleep(time.Minute * 1)
-			}
-			time.Sleep(time.Minute * 5)
-		}
-	}()
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
 	router.GET("/", func(c *gin.Context) {
@@ -39,30 +19,6 @@ func main() {
 	})
 	router.GET("/info", info)
 	router.Run() // listen and serve on 0.0.0.0:8080
-}
-
-func feedWriter(url string) error {
-	// Parse request
-	fp := gofeed.NewParser()
-	feed, _ := fp.ParseURL(url)
-	info := strings.Split(feed.Items[0].Description, "<br/>")[3]
-	entry := &Entry{
-		Name: feed.Items[0].Title,
-		Body: info,
-	}
-	cleanName, _ := cleanFilename(entry.Name)
-	filename := cleanName + ".txt"
-	return os.WriteFile(filename, []byte(entry.Body), 0600)
-}
-
-func cleanFilename(name string) (string, error) {
-	if name == "" {
-		return "", fmt.Errorf("filename cannot be empty")
-	}
-	lower := strings.ToLower(name)
-	r := strings.ReplaceAll(lower, " - ", " ")
-	cleanName := strings.ReplaceAll(r, " ", "-")
-	return cleanName, nil
 }
 
 func info(c *gin.Context) {
